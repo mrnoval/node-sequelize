@@ -2,81 +2,77 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models/index");
 const todosController = require("./../controller/todosController");
-// const usersController = require("./../control.er/userController");
+const usersController = require("./../controller/usersController");
 
-// get all todos
+// To-dos
+
+/**
+ * @swagger
+ * /api/all:
+ *  get:
+ *    description: Use to request all customers
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 router.get("/all", todosController.todos_all);
 
-// get single todo by id
-router.get("/find/:id", (req, res) => {
-    db.Todo.findAll({
-      where: {
-        id: req.params.id
-      }
-    }).then(todo => res.send(todo));
-});
+/**
+ * @swagger
+ * /api/find/:id:
+ *  get:
+ *    description: Use to request all customers
+ *    parameters: 
+ *      - name: id
+ *        description: id of todo
+ *        in: formData
+ *        required: true
+ *        type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+router.get("/find/:id", todosController.todos_one);
 
-// post new todo
-router.post("/new", (req, res) => {
-    db.Todo.create({
-      text: req.body.text
-    }).then(submitedTodo => res.send(submitedTodo));
-});
+/**
+ * @swagger
+ * /api/new:
+ *  post:
+ *    description: Use to request all customers
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+router.post("/new", todosController.todos_new);
 
-// delete todo
-router.delete("/delete/:id", (req, res) => {
-    db.Todo.destroy({
-        where: {
-            id: req.params.id
-        }
-    }).then(() => res.send("successfully deleted"));
-});
+/**
+ * @swagger
+ * /api/delete:
+ *  delete:
+ *    description: Use to request all customers
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+router.delete("/delete/:id", todosController.todos_delete);
 
-// edit a todo
-router.put("/edit", (req, res) => {
-    db.Todo.update({
-        text: req.body.text
-    }, {
-        where: { id: req.body.id }
-    }).then(() => res.send("updated"));
-});
+/**
+ * @swagger
+ * /api/edit:
+ *  put:
+ *    description: Use to request all customers
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+router.put("/edit", todosController.todos_edit);
 
-
-router.get("/users", (req, res) => {
-    db.User.findAll().
-        then(users => res.send(users));
-});
-
-router.get("/users/:id", (req,res) => {
-    db.User.findOne({
-        where: {
-           id: req.params.id
-        }
-    }).then((user) => res.send(user));
-});
-
-router.post("/users", (req, res) => {
-    db.User.create({
-        username: req.body.username,
-        password: req.body.password,
-    }).then(newUser => res.send(newUser));
-});
-
-router.put("/users", (req, res) => {
-    db.User.update({
-        password: req.body.password
-    }, {
-        where: { id: req.body.id }
-    }).then(() =>  res.send("sucessfully updated"));
-});
-
-router.delete("/users/:id", (req, res) => {
-    db.User.delete({
-        where: {
-            id: req.params.id
-        }
-    }).then();
-});
+// Users
+router.get("/users", usersController.all_users);
+router.get("/users/:id", usersController.find_user);
+router.post("/users", usersController.new_user);
+router.put("/users", usersController.edit_user);
+router.delete("/users/:id", usersController.delete_user);
 
 module.exports = router;
 
