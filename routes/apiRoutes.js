@@ -45,6 +45,9 @@ router.get("/find/:id", todosController.todos_one);
  */
 router.post("/new", todosController.todos_new);
 
+router.post("/new_bulk_transaction", todosController.todos_new_bulk_transaction);
+
+// router.post("/new_transaction", todosController.todos_transaction_new);
 /**
  * @swagger
  * /api/delete:

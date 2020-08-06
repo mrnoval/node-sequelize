@@ -19,6 +19,22 @@ const todos_new =  (req, res) => {
     }).then(submitedTodo => res.send(submitedTodo));
 };
 
+const todos_new_bulk_transaction = (req, res) => {
+    try {
+        db.sequelize.transaction(async (t) => {
+            await db.Todo.bulkCreate(req.body, {transaction: t});
+        })
+        .then(todos => {
+            return res.send(todos) 
+        })
+        .catch(err => { 
+            return res.status(409).send(err.parent.sqlMessage) 
+        });
+    } catch (err) {
+        return res.send(err);
+    }
+};
+
 const todos_delete = (req, res) => {
     db.Todo.destroy({
         where: {
@@ -41,4 +57,5 @@ module.exports = {
     todos_new,
     todos_delete,
     todos_edit,
+    todos_new_bulk_transaction,
 };
